@@ -1,2 +1,0 @@
-# Foodpile
- grocery list tracker
