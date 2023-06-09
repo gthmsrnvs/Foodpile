@@ -1,30 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useRef } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [formData, setFormData] = useState({
+    name: "",
+    expiryDate: "",
+    dietaryType: "",
+    amount: ""
+  })
+
+  const dialog = useRef(null);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    localStorage.setItem('formData', JSON.stringify(formData));
+    setFormData({
+      name: "",
+      expiryDate: "",
+      dietaryType: "",
+      amount: ""
+    })
+    dialog.current.showModal();
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
+      <h1>Foodpile</h1>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+        </label>
+        <label>
+          Expiry Date:
+          <input type="date" name="expiryDate" value={formData.expiryDate} onChange={handleChange} required />
+        </label>
+        <label>
+          Dietary Type:
+          <select name="dietaryType" value={formData.dietaryType} onChange={handleChange} required>
+            <option value="">--Please choose an option--</option>
+            <option value="non-vegetarian">Non-Vegetarian</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="pescetarian">Pescetarian</option>
+            
+          </select>
+        </label>
+        <label>
+          Amount:
+          <input type="number" name="amount" value={formData.amount} onChange={handleChange} required />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+      <dialog ref={dialog}>
+        <p>Form submitted successfully!</p>
+        <button onClick={() => dialog.current.close()}>Close</button>
+      </dialog>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
