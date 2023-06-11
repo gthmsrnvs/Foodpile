@@ -6,94 +6,120 @@
   --less-important-button-color: #ff9b85;
 }
 
-#root {
-  height: 100vh;
-  width: 100%;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: Arial, sans-serif;
-  background-color: #cacaca;
+h1{
+  color: var(--text-color);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 2em;
 }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+.main-content {
+  flex: 3;
+  padding: 1em;
+  overflow: auto;
+}
+
+.aside-content {
+  flex: 1;
+  padding: 1em;
+  overflow: auto;
+  border-left: 1px solid #ccc;
+}
+
+h1 {
+  color: var(--text-color);
+}
+
+button {
+  background-color: var(--less-important-button-color);
+  color: #fff;
+  font-size: 1em;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: 10px 20px;
+  font-size: 24px;
+  text-align: center;
+  transition: all 0.5s;
+  outline: none;
+  box-shadow: 0 6px var(--important-button-color);
+  border-radius: 50px; /* Add this line to make the button rounded */
+}
+
+button:active {
+  background-color: #ff7b73; /* darker shade of the button color */
+  box-shadow: 0 2px var(--important-button-color);
+  transform: translateY(6px); /* Increase this value for a more "clicky" animation */
+  transition: transform 0.1s; /* Add this line to make the animation smoother */
+}
+
+button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.5s;
+}
+
+button:hover:before {
+  width: 100%;
+}
+
+button:hover {
+  background-color: #ff958c; /* lighter shade of the button color */
+}
+
+
 
 form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
-  width: 100%;;
-  border-radius: 4px;
-  max-width: 100%;
-  max-height: 100%;
-  position: relative;
-}
-
-#plusButton{
-  border-radius: 50%;
-  position: fixed;
-  bottom: 35%;
-  cursor: pointer;
-  background-color: var(--less-important-button-color);
-  color: #fff;
-  font-size: 2em;
-  border: none;
-}
-
-label {
-  color: #000;
-  display: block;
-  margin-bottom: 1em;
-  font-size: 1.2em;
 }
 
 input, select {
-  display: block;
-  margin: auto;
-  width: 60%;
-  font-size: 1em;
-  border-radius: 4px;
+  margin-bottom: 1em;
   padding: 0.5em;
   border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 input[type="submit"] {
-  background: #646cff;
+  background-color: var(--important-button-color);
   color: #fff;
   cursor: pointer;
 }
 
 input[type="submit"]:hover {
-  background: #5656d6;
+  background-color: var(--warning-color);
 }
 
-.close-button {
-  z-index: 1;
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  border: none;
-  background-color: transparent;
-  color: #000; /* color of the 'X' */
-  font-size: 1.5em; /* size of the 'X' */
-  cursor: pointer;
+.list-container {
+  max-height: 100%;
+  overflow-y: auto;
 }
 
-dialog {
-  background: rgba(255, 255, 255, 0.8); 
-  backdrop-filter: blur(10px);
-  max-width: 500px;
-  margin: 0 auto;
-  border-radius: 2%;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+.list-item {
+  border: 1px solid #ccc;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+  background-color: rgb(27, 254, 133);
 }
-
 
 .credits {
   color: #888;
@@ -102,4 +128,15 @@ dialog {
   bottom: 2em;
   left: 0;
   right: 0;
+}
+
+/* Media query for screens 768px wide or smaller */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .main-content, .aside-content {
+    flex: 1;
+  }
 }
