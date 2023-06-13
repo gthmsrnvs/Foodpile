@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import "./App.css";
 import { v4 as uuidv4 } from "uuid";
 import List from "./list.jsx";
@@ -13,6 +13,8 @@ function App() {
     dietaryType: "",
     amount: "",
   });
+
+  const [items, setItems] = useState([]);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -30,6 +32,7 @@ function App() {
     console.log(formData);
     const id = uuidv4();
     localStorage.setItem(`formData_${id}`, JSON.stringify(formData));
+    setItems((prevItems) => [...prevItems, formData]);
     setFormData({
       name: "",
       expiryDate: "",
@@ -119,7 +122,7 @@ function App() {
           <p className="credits">By Gautham Srinivas</p>
         </div>
         <aside className="aside-content">
-          <List />
+          <List items={items} />
         </aside>
       </div>
     </>

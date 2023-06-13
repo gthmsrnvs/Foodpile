@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function List() {
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    const keys = Object.keys(localStorage).filter(key => key.startsWith('formData_'));
-    const storedItems = keys.map(key => JSON.parse(localStorage.getItem(key)));
-    setItems(storedItems);
-  }, []);
-
+function List({ items }) {
   return (
     <div className="list-container">
       <h2>Groceries: </h2>
@@ -21,5 +13,6 @@ function List() {
     </div>
   );
 }
+
 
 export default List;
