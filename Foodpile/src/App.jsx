@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import { v4 as uuidv4 } from "uuid";
 import List from "./list.jsx";
@@ -12,34 +12,42 @@ function App() {
     expiryDate: "",
     dietaryType: "",
     amount: "",
+    notify: false,
   });
 
   const [items, setItems] = useState([]);
+
+  const [notifyItems, setNotifyItems] = useState(
+    JSON.parse(localStorage.getItem("notifyItems")) || {}
+  );
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const dialog = useRef(null);
 
   const handleChange = (e) => {
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     const id = uuidv4();
-    localStorage.setItem(`formData_${id}`, JSON.stringify(formData));
-    setItems((prevItems) => [...prevItems, formData]);
+    const newItem = { ...formData, id, notify: formData.notify };
+    const newItems = [...items, newItem];
+    setItems(newItems);
+    localStorage.setItem('items', JSON.stringify(newItems));
     setFormData({
       name: "",
       expiryDate: "",
       dietaryType: "",
       amount: "",
+      notify: false,
     });
-    dialog.current.showModal();
   };
 
   const openDialog = () => {
@@ -50,11 +58,22 @@ function App() {
     setIsDialogOpen(false);
   };
 
+  const toggleNotify = (id) => {
+    const newNotifyItems = {
+      ...notifyItems,
+      [id]: !notifyItems[id],
+    };
+    setNotifyItems(newNotifyItems);
+    localStorage.setItem("notifyItems", JSON.stringify(newNotifyItems));
+  };
+
   return (
     <>
       <div className="app-container">
         <div className="main-content">
           <h1>Foodpile</h1>
+          <button onClick={() => localStorage.clear()}>Clear localStorage</button>
+          <h2>Add an item to your grocery list:</h2> 
           <button id="plusButton" onClick={openDialog}>
             <FontAwesomeIcon icon={faPlus} />
           </button>
@@ -109,6 +128,15 @@ function App() {
                     required
                   />
                 </label>
+                <label>
+                  Enable notifications:
+                  <input
+                    type="checkbox"
+                    name="notify"
+                    checked={formData.notify}
+                    onChange={handleChange}
+                  />
+                </label>
                 <input type="submit" value="Submit" />
               </form>
             </dialog>
@@ -122,7 +150,11 @@ function App() {
           <p className="credits">By Gautham Srinivas</p>
         </div>
         <aside className="aside-content">
-          <List items={items} />
+          <List
+            items={items}
+            notifyItems={notifyItems}
+            toggleNotify={toggleNotify}
+          />
         </aside>
       </div>
     </>
