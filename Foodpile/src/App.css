@@ -130,6 +130,18 @@ input[type="submit"]:hover {
   right: 0;
 }
 
+/* Styling for delete button */
+.fa-trash {
+  transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+  margin-left: 10px;
+}
+
+/* Delete button hover effect */
+.fa-trash:hover {
+  transform: scale(1.2);
+  color: #d12f2f; /* Feel free to change this color to one you prefer */
+}
+
 /* Media query for screens 768px wide or smaller */
 @media (max-width: 768px) {
   .app-container {
