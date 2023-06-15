@@ -83,16 +83,6 @@ function App() {
     });
   };
 
-  const spotlight = document.getElementById("spotlight");
-
-  document.onmousemove = function (e) {
-    spotlight.style.left =
-      e.pageX -
-      100 +
-      "px"; /* Subtract half the width and height to center the spotlight */
-    spotlight.style.top = e.pageY - 100 + "px";
-  };
-
   const openDialog = () => {
     setIsDialogOpen(true);
   };
@@ -145,7 +135,6 @@ function App() {
       <div className="app-container">
         <div className="main-content">
           <h1>Foodpile</h1>
-          <div id="spotlight"></div>
           <button onClick={() => localStorage.clear()}>
             Clear localStorage
           </button>

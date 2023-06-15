@@ -23,21 +23,9 @@ body {
   overflow: hidden;
   height: 100vh;
   margin: 0;
-  cursor: none; /* Hide the default cursor */
   padding: 0;
   font-family: Arial, sans-serif;
   background-color: var(--background-color);
-}
-
-#spotlight {
-  pointer-events: none; /* Allows interaction with elements under the spotlight */
-  position: absolute;
-  background: rgba(255, 255, 255, 0.2); /* Light spotlight */
-  border-radius: 50%; /* Circular spotlight */
-  width: 200px; /* Size of the spotlight */
-  height: 200px;
-  mix-blend-mode: screen; /* Blending mode to create the lighting effect */
-  transition: all 0.1s ease; /* Smooth movement */
 }
 
 .app-container {
