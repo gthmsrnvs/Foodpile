@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
+// main app component
 function App() {
   const [formData, setFormData] = useState({
     name: "",
@@ -15,14 +16,18 @@ function App() {
     notify: false,
   });
 
+  // Keep track of items in state
   const [items, setItems] = useState([]);
 
+  // Keep track of items that have notifications enabled
   const [notifyItems, setNotifyItems] = useState(
     JSON.parse(localStorage.getItem("notifyItems")) || {}
   );
 
+  // Keep track of whether the dialog is open or not
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  // Keep track of the dialog element
   const dialog = useRef(null);
 
   // Keep track of timeouts to clear them if needed
@@ -34,14 +39,17 @@ function App() {
     if (storedItems) {
       setItems(JSON.parse(storedItems));
     }
-    
+
     // Requesting permission for notifications
-    if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+    if (
+      Notification.permission !== "granted" &&
+      Notification.permission !== "denied"
+    ) {
       Notification.requestPermission();
     }
 
     // Schedule notifications for items already in the list
-    items.forEach(item => scheduleNotification(item));
+    items.forEach((item) => scheduleNotification(item));
 
     // Clear timeouts when component unmounts
     return () => {
@@ -75,6 +83,16 @@ function App() {
     });
   };
 
+  const spotlight = document.getElementById("spotlight");
+
+  document.onmousemove = function (e) {
+    spotlight.style.left =
+      e.pageX -
+      100 +
+      "px"; /* Subtract half the width and height to center the spotlight */
+    spotlight.style.top = e.pageY - 100 + "px";
+  };
+
   const openDialog = () => {
     setIsDialogOpen(true);
   };
@@ -106,12 +124,16 @@ function App() {
     localStorage.setItem("notifyItems", JSON.stringify(newNotifyItems));
   };
 
+  // Schedule notification for an item
   const scheduleNotification = (item) => {
     if (notifyItems[item.id] && item.expiryDate) {
-      const timeRemaining = new Date(item.expiryDate).getTime() - new Date().getTime();
+      const timeRemaining =
+        new Date(item.expiryDate).getTime() - new Date().getTime();
       if (timeRemaining > 0) {
         const timeoutId = setTimeout(() => {
-          new Notification("Item Expiring!", { body: `${item.name} is expiring soon.` });
+          new Notification("Item Expiring!", {
+            body: `${item.name} is expiring soon.`,
+          });
         }, timeRemaining);
         notificationTimeouts.current.push(timeoutId);
       }
@@ -123,6 +145,7 @@ function App() {
       <div className="app-container">
         <div className="main-content">
           <h1>Foodpile</h1>
+          <div id="spotlight"></div>
           <button onClick={() => localStorage.clear()}>
             Clear localStorage
           </button>
@@ -166,9 +189,21 @@ function App() {
                     required
                   >
                     <option value="">--Please choose an option--</option>
-                    <option value="non-vegetarian">Non-Vegetarian</option>
-                    <option value="vegetarian">Vegetarian</option>
-                    <option value="pescetarian">Pescetarian</option>
+                    <option value="produce">Produce</option>
+                    <option value="bakery">Bakery</option>
+                    <option value="meat">Meat</option>
+                    <option value="seafood">Seafood</option>
+                    <option value="dairy">Dairy, Eggs & Cheese</option>
+                    <option value="canned">Canned Goods & Soups</option>
+                    <option value="dry">Dry Goods & Pasta</option>
+                    <option value="frozen">Frozen Foods</option>
+                    <option value="beverages">Beverages</option>
+                    <option value="snacks">Snacks & Candy</option>
+                    <option value="personalcare">Personal Care</option>
+                    <option value="household">Household Essentials</option>
+                    <option value="pet">Pet Care</option>
+                    <option value="baby">Baby</option>
+                    <option value="international">International Cuisine</option>
                   </select>
                 </label>
                 <label>

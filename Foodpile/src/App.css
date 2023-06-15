@@ -1,6 +1,6 @@
 :root {
   --background-color: #aaf683;
-  --text-color: #60d394;
+  --text-color: #9F2C6B;
   --important-button-color: #ee6055;
   --warning-color: #ffd97d;
   --less-important-button-color: #ff9b85;
@@ -12,11 +12,32 @@ h1{
   font-size: 2em;
 }
 
+h2{
+  color: var(--text-color);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.5em;
+}
+
 body {
+  background: #000; /* Dark background */
+  overflow: hidden;
+  height: 100vh;
   margin: 0;
+  cursor: none; /* Hide the default cursor */
   padding: 0;
   font-family: Arial, sans-serif;
   background-color: var(--background-color);
+}
+
+#spotlight {
+  pointer-events: none; /* Allows interaction with elements under the spotlight */
+  position: absolute;
+  background: rgba(255, 255, 255, 0.2); /* Light spotlight */
+  border-radius: 50%; /* Circular spotlight */
+  width: 200px; /* Size of the spotlight */
+  height: 200px;
+  mix-blend-mode: screen; /* Blending mode to create the lighting effect */
+  transition: all 0.1s ease; /* Smooth movement */
 }
 
 .app-container {
@@ -25,9 +46,14 @@ body {
 }
 
 .main-content {
+  display: flex;
   flex: 3;
-  padding: 1em;
+  padding: 2em;
+  margin: auto;
   overflow: auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .aside-content {
@@ -35,6 +61,29 @@ body {
   padding: 1em;
   overflow: auto;
   border-left: 1px solid #ccc;
+  transition: all 0.3s ease-in-out;
+  background-color: #2ae042;
+  color: #000000
+}
+
+.list-container {
+  max-height: 100%;
+  overflow-y: auto;
+  transition: all 0.3s ease-in-out;
+}
+
+.list-item {
+  border: 1px solid #ccc;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+  background-color: rgb(27, 254, 133);
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.list-item:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 h1 {
@@ -84,7 +133,6 @@ button:hover {
 }
 
 
-
 form {
   display: flex;
   flex-direction: column;
@@ -108,19 +156,6 @@ input[type="submit"]:hover {
   background-color: var(--warning-color);
 }
 
-.list-container {
-  max-height: 100%;
-  overflow-y: auto;
-}
-
-.list-item {
-  border: 1px solid #ccc;
-  padding: 1em;
-  margin: 1em 0;
-  border-radius: 4px;
-  background-color: rgb(27, 254, 133);
-}
-
 .credits {
   color: #888;
   text-align: center;
@@ -134,12 +169,13 @@ input[type="submit"]:hover {
 .fa-trash {
   transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
   margin-left: 10px;
+  cursor: pointer;
 }
 
 /* Delete button hover effect */
 .fa-trash:hover {
   transform: scale(1.2);
-  color: #d12f2f; /* Feel free to change this color to one you prefer */
+  color: #d12f2f; 
 }
 
 /* Media query for screens 768px wide or smaller */
