@@ -176,3 +176,24 @@ input[type="submit"]:hover {
     flex: 1;
   }
 }
+
+/* Media query for screens 600px wide or smaller */
+@media (max-width: 600px) {
+  .main-content {
+    padding: 1em;
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  h2 {
+    font-size: 1.2em;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 18px;
+  }
+}
