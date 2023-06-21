@@ -71,10 +71,12 @@ body {
   background-color: rgb(27, 254, 133);
   transition: all 0.3s ease-in-out;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  mix-blend-mode: luminosity;
 }
 
 .list-item:hover {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  mix-blend-mode: normal;
 }
 
 /* Button styles */

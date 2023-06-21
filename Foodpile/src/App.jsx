@@ -5,6 +5,8 @@ import List from "./components/list.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import Spline from '@splinetool/react-spline';
+
 
 // main app component
 function App() {
@@ -138,6 +140,7 @@ function App() {
           <button onClick={() => localStorage.clear()}>
             Clear localStorage
           </button>
+          <Spline scene="https://prod.spline.design/L7rU2LXUbiLkBMBd/scene.splinecode" />
           <h2>Add an item to your grocery list:</h2>
           <button id="plusButton" onClick={openDialog}>
             <FontAwesomeIcon icon={faPlus} />
