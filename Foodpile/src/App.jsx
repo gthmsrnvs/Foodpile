@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import { v4 as uuidv4 } from "uuid";
 import List from "./components/list.jsx";
+import Tesseract from "tesseract.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import Spline from '@splinetool/react-spline';
-
+import Spline from "@splinetool/react-spline";
 
 // main app component
 function App() {
@@ -31,6 +31,9 @@ function App() {
 
   // Keep track of the dialog element
   const dialog = useRef(null);
+
+  // Keep track of the image input element
+  const imageInputRef = useRef(null);
 
   // Keep track of timeouts to clear them if needed
   const notificationTimeouts = useRef([]);
@@ -132,6 +135,27 @@ function App() {
     }
   };
 
+  const triggerImageUpload = () => {
+    imageInputRef.current.click();
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        Tesseract.recognize(
+            file,
+            'eng',
+            {
+                logger: (m) => console.log(m) // Add logger for progress
+            }
+        ).then(({ data: { text } }) => {
+            console.log(text);
+            alert(`Text has been extracted successfully.`);
+        });
+    }
+};
+
+
   return (
     <>
       <div className="app-container">
@@ -146,7 +170,7 @@ function App() {
             <FontAwesomeIcon icon={faPlus} />
           </button>
           {isDialogOpen && (
-            <dialog open>
+            <dialog className="formDialog" open>
               <button className="close-button" onClick={closeDialog}>
                 <FontAwesomeIcon icon={faTimes} />
               </button>
@@ -156,7 +180,7 @@ function App() {
                   <input
                     type="text"
                     name="name"
-                    placeholder="e.g. Lettuce"
+                    placeholder="  e.g. Lettuce"
                     value={formData.name}
                     onChange={handleChange}
                     required
@@ -180,7 +204,7 @@ function App() {
                     onChange={handleChange}
                     required
                   >
-                    <option value="">--Please choose an option--</option>
+                    <option value="">Choose your category</option>
                     <option value="produce">Produce</option>
                     <option value="bakery">Bakery</option>
                     <option value="meat">Meat</option>
@@ -219,6 +243,21 @@ function App() {
                 </label>
                 <input type="submit" value="Submit" />
               </form>
+              <input
+                type="file"
+                id="image-upload"
+                accept="image/*"
+                onChange={handleImageUpload}
+                ref={imageInputRef}
+                style={{ display: "none" }}
+              />
+              <label
+                htmlFor="image-upload"
+                className="image-upload-button"
+                onClick={triggerImageUpload}
+              >
+                Drop image here or click to select
+              </label>
             </dialog>
           )}
           <dialog ref={dialog}>
