@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Firebase Integration
+/src/firebase.js
+/src/sketch.js
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
