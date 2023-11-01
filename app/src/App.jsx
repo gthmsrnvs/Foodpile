@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import Spline from "@splinetool/react-spline";
+import heic2any from "heic2any";
 
 // main app component
 function App() {
@@ -139,22 +140,86 @@ function App() {
     imageInputRef.current.click();
   };
 
+  // Function to convert HEIC to PNG
+  const convertToPNG = (file, callback) => {
+    const fileType = file.type.split("/")[1]; // 'image/png' -> 'png'
+    if (fileType !== "png") {
+      console.log("Starting HEIC to PNG conversion...");
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+          canvas.toBlob((blob) => {
+            console.log("HEIC to PNG conversion completed.");
+            callback(blob);
+          }, "image/png");
+        };
+      };
+      reader.readAsDataURL(file);
+    } else {
+      console.log("Image is already in PNG format. Skipping conversion.");
+      callback(file);
+    }
+  };
+
+  // Function to resize the image
+  const resizeImage = (file, callback) => {
+    console.log("Checking if image resizing is needed...");
+
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      const { width, height } = img;
+      // Check if the image dimensions are suitable for OCR
+      if (width >= 300 && height >= 300) {
+        console.log(
+          "Image dimensions are suitable for OCR. Skipping resizing."
+        );
+        callback(file);
+      } else {
+        console.log("Starting image resizing...");
+        const canvas = document.createElement("canvas");
+        canvas.width = 300;
+        canvas.height = 300;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, 300, 300);
+        canvas.toBlob((blob) => {
+          console.log("Image resizing completed.");
+          callback(blob);
+        }, "image/png");
+      }
+    };
+  };
+
+  // Main handleImageUpload function
   const handleImageUpload = (e) => {
+    console.log("Handling image upload...");
     const file = e.target.files[0];
     if (file) {
-        Tesseract.recognize(
-            file,
-            'eng',
-            {
-                logger: (m) => console.log(m) // Add logger for progress
-            }
-        ).then(({ data: { text } }) => {
-            console.log(text);
+      // Convert to PNG if needed
+      convertToPNG(file, (convertedFile) => {
+        // Resize if needed
+        resizeImage(convertedFile, (resizedFile) => {
+          // Perform OCR
+          console.log("Starting OCR...");
+          Tesseract.recognize(resizedFile, "eng", {
+            oem: 2,
+            psm: 11,
+            logger: (m) => console.log(m),
+          }).then(({ data: { text } }) => {
+            console.log("OCR completed. Extracted text:", text);
             alert(`Text has been extracted successfully.`);
+          });
         });
+      });
     }
-};
-
+  };
 
   return (
     <>
@@ -246,7 +311,7 @@ function App() {
               <input
                 type="file"
                 id="image-upload"
-                accept="image/*"
+                accept="image/*,.heic"
                 onChange={handleImageUpload}
                 ref={imageInputRef}
                 style={{ display: "none" }}
